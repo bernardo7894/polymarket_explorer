@@ -38,6 +38,7 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
     const [volumeThreshold, setVolumeThreshold] = useState(0); // Default to 0 to show more, or user preference
     const [sortOrder, setSortOrder] = useState<'default' | 'volume' | 'name'>('default');
     const [viewMode, setViewMode] = useState<'individual' | 'overlay'>('individual');
+    const [detailLevel, setDetailLevel] = useState<number>(600); // Default 600 points
     const [mounted, setMounted] = useState(false);
     const [polls, setPolls] = useState<Poll[]>([]);
     const [showPolls, setShowPolls] = useState(true);
@@ -181,6 +182,20 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                         </button>
                     </div>
 
+                    <div className="pt-2 border-t border-slate-800">
+                        <label className="block text-xs text-slate-400 mb-1">Chart Detail</label>
+                        <select
+                            value={detailLevel}
+                            onChange={(e) => setDetailLevel(Number(e.target.value))}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value={200}>Low (Fast)</option>
+                            <option value={600}>Medium</option>
+                            <option value={1500}>High (Slow)</option>
+                            <option value={20000}>Full (Very Slow)</option>
+                        </select>
+                    </div>
+
                     <div>
                         <label className="block text-xs text-slate-400 mb-1">View Mode</label>
                         <div className="flex gap-2">
@@ -241,7 +256,7 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                                 <span className="text-slate-500">Loading all market data...</span>
                             </div>
                         ) : allChartData.length > 0 ? (
-                            <ChartComponents mode="multi" datasets={allChartData} polls={showPolls ? polls : undefined} />
+                            <ChartComponents mode="multi" datasets={allChartData} polls={showPolls ? polls : undefined} detailLevel={detailLevel} />
                         ) : (
                             <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800">
                                 <span className="text-slate-500">No data available</span>
@@ -268,7 +283,7 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                                 <span className="text-slate-500">Loading market data...</span>
                             </div>
                         ) : chartData.length > 0 ? (
-                            <ChartComponents mode="single" data={chartData} question={selectedMarket.question} polls={showPolls ? polls : undefined} />
+                            <ChartComponents mode="single" data={chartData} question={selectedMarket.question} polls={showPolls ? polls : undefined} detailLevel={detailLevel} />
                         ) : (
                             <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800">
                                 <span className="text-slate-500">No chart data available</span>

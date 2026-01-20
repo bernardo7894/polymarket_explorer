@@ -29,12 +29,14 @@ interface SingleChartProps {
     data: DataPoint[];
     question: string;
     polls?: Poll[];
+    detailLevel?: number;
 }
 
 interface MultiChartProps {
     mode: "multi";
     datasets: { id: string; name: string; data: DataPoint[] }[];
     polls?: Poll[];
+    detailLevel?: number;
 }
 
 type ChartProps = SingleChartProps | MultiChartProps;
@@ -158,8 +160,16 @@ export default function ChartComponents(props: ChartProps) {
 
         // Create display data based on zoom level
         const displayData = useMemo(() => {
-            return downsample(data, left, right, 600);
-        }, [data, left, right]);
+            return downsample(data, left, right, props.detailLevel || 600);
+        }, [data, left, right, props.detailLevel]);
+
+        // Calculate info string
+        const infoString = useMemo(() => {
+            if (displayData.length < 2) return "";
+            const avgInterval = (displayData[displayData.length - 1].t - displayData[0].t) / displayData.length;
+            const mins = Math.round(avgInterval / 60);
+            return `Showing ${displayData.length} pts (~1pt/${mins}m)`;
+        }, [displayData]);
 
         const minPrice = Math.min(...data.map((d) => d.p));
         const maxPrice = Math.max(...data.map((d) => d.p));
@@ -169,6 +179,7 @@ export default function ChartComponents(props: ChartProps) {
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold text-slate-100 truncate flex-1" title={question}>
                         {question}
+                        <span className="ml-3 text-xs font-normal text-slate-500">{infoString}</span>
                     </h2>
                     <button
                         onClick={zoomOut}
@@ -259,8 +270,15 @@ export default function ChartComponents(props: ChartProps) {
 
     // Downsample merged data
     const displayData = useMemo(() => {
-        return downsample(mergedData, left, right, 600);
-    }, [mergedData, left, right]);
+        return downsample(mergedData, left, right, props.detailLevel || 600);
+    }, [mergedData, left, right, props.detailLevel]);
+
+    const infoString = useMemo(() => {
+        if (displayData.length < 2) return "";
+        const avgInterval = (displayData[displayData.length - 1].t - displayData[0].t) / displayData.length;
+        const mins = Math.round(avgInterval / 60);
+        return `Showing ${displayData.length} pts (~1pt/${mins}m)`;
+    }, [displayData]);
 
     if (displayData.length === 0) {
         return (
@@ -273,7 +291,10 @@ export default function ChartComponents(props: ChartProps) {
     return (
         <div className="w-full bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-2xl select-none">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-slate-100">All Candidates Comparison</h2>
+                <h2 className="text-xl font-bold text-slate-100">
+                    All Candidates Comparison
+                    <span className="ml-3 text-xs font-normal text-slate-500">{infoString}</span>
+                </h2>
                 <button
                     onClick={zoomOut}
                     disabled={left === "dataMin" && right === "dataMax"}
