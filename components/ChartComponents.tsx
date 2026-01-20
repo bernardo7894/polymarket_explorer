@@ -85,6 +85,34 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return null;
 };
 
+// Helper to downsample data
+const downsample = (data: any[], left: number | string | null, right: number | string | null, targetPoints = 400) => {
+    if (!data || data.length === 0) return [];
+
+    // If full view (strings 'dataMin'/'dataMax'), use entire range
+    const startIdx = typeof left === 'number' ? data.findIndex(d => d.t >= left) : 0;
+    const endIdx = typeof right === 'number' ? data.findIndex(d => d.t > right) : data.length;
+
+    const sliceStart = startIdx === -1 ? 0 : startIdx;
+    const sliceEnd = endIdx === -1 ? data.length : endIdx;
+    const sliceLength = sliceEnd - sliceStart;
+
+    if (sliceLength <= targetPoints) {
+        return data; // Return full resolution if within target
+    }
+
+    const stride = Math.ceil(sliceLength / targetPoints);
+    const result = [];
+    for (let i = sliceStart; i < sliceEnd; i += stride) {
+        result.push(data[i]);
+    }
+    // Always include the last point of the slice to prevent gaps at right edge
+    if (sliceLength > 0 && result[result.length - 1] !== data[sliceEnd - 1]) {
+        result.push(data[sliceEnd - 1]);
+    }
+    return result;
+};
+
 export default function ChartComponents(props: ChartProps) {
     const electionTimestamp = new Date("2026-01-18T00:00:00Z").getTime() / 1000;
 
@@ -128,6 +156,11 @@ export default function ChartComponents(props: ChartProps) {
             );
         }
 
+        // Create display data based on zoom level
+        const displayData = useMemo(() => {
+            return downsample(data, left, right, 600);
+        }, [data, left, right]);
+
         const minPrice = Math.min(...data.map((d) => d.p));
         const maxPrice = Math.max(...data.map((d) => d.p));
 
@@ -152,7 +185,7 @@ export default function ChartComponents(props: ChartProps) {
                 <LineChart
                     width={900}
                     height={500}
-                    data={data}
+                    data={displayData}
                     onMouseDown={(e) => e && setRefAreaLeft(e.activeLabel as string)}
                     onMouseMove={(e) => refAreaLeft && e && setRefAreaRight(e.activeLabel as string)}
                     onMouseUp={zoom}
@@ -224,7 +257,12 @@ export default function ChartComponents(props: ChartProps) {
         return Array.from(mergedMap.values()).sort((a, b) => a.t - b.t);
     }, [datasets]);
 
-    if (mergedData.length === 0) {
+    // Downsample merged data
+    const displayData = useMemo(() => {
+        return downsample(mergedData, left, right, 600);
+    }, [mergedData, left, right]);
+
+    if (displayData.length === 0) {
         return (
             <div className="w-full h-[600px] bg-slate-900 rounded-xl p-4 border border-slate-800 flex items-center justify-center">
                 <span className="text-slate-500">No data available</span>
@@ -251,7 +289,7 @@ export default function ChartComponents(props: ChartProps) {
             <LineChart
                 width={1000}
                 height={550}
-                data={mergedData}
+                data={displayData}
                 onMouseDown={(e) => e && setRefAreaLeft(e.activeLabel as string)}
                 onMouseMove={(e) => refAreaLeft && e && setRefAreaRight(e.activeLabel as string)}
                 onMouseUp={zoom}
