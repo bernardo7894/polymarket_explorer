@@ -1,0 +1,82 @@
+[
+    {
+        "date": "2025-06-20T00:00:00",
+        "firm": "Correio da Manhã",
+        "description": "First baseline; high indecision"
+    },
+    {
+        "date": "2025-07-21T20:00:00",
+        "firm": "Intercampus (CMTV)",
+        "description": "Ventura base identified"
+    },
+    {
+        "date": "2025-08-06T00:00:00",
+        "firm": "Aximage (DN/JN)",
+        "description": "Summer lull; PS weakness"
+    },
+    {
+        "date": "2025-09-04T23:00:00",
+        "firm": "Expresso",
+        "description": "Gouveia e Melo viability test"
+    },
+    {
+        "date": "2025-10-14T21:00:00",
+        "firm": "CNN Portugal",
+        "description": "Gouveia e Melo leads runoff scenarios"
+    },
+    {
+        "date": "2025-11-21T23:00:00",
+        "firm": "Público",
+        "description": "Cotrim overtakes Seguro (outlier)"
+    },
+    {
+        "date": "2025-12-16T20:00:00",
+        "firm": "Católica (RTP)",
+        "description": "3-way tie (Ventura/Mendes/Gouveia)"
+    },
+    {
+        "date": "2026-01-05T20:00:00",
+        "firm": "Pitagórica (CNN/TVI)",
+        "description": "Tracking Poll Launch"
+    },
+    {
+        "date": "2026-01-10T20:00:00",
+        "firm": "Pitagórica (CNN/TVI)",
+        "description": "Cotrim overtakes Ventura in track"
+    },
+    {
+        "date": "2026-01-11T10:43:00",
+        "firm": "Pitagórica (CNN/TVI)",
+        "description": "Mendes falls out of contention"
+    },
+    {
+        "date": "2026-01-14T00:00:00",
+        "firm": "Aximage (DN/JN)",
+        "description": "Runoff defined: Seguro vs Ventura"
+    },
+    {
+        "date": "2026-01-14T20:00:00",
+        "firm": "Católica (RTP)",
+        "description": "Seguro 1st; Ventura/Mendes fight for 2nd"
+    },
+    {
+        "date": "2026-01-14T20:00:00",
+        "firm": "Intercampus (CMTV)",
+        "description": "Ventura 1st; Mendes 2nd (Divergent)"
+    },
+    {
+        "date": "2026-01-15T12:00:00",
+        "firm": "Consulmark2 (Euronews)",
+        "description": "4-way tie for 2nd place"
+    },
+    {
+        "date": "2026-01-15T23:49:00",
+        "firm": "Pitagórica (CNN/TVI)",
+        "description": "Cotrim surges to 21.1% (Liberal Hype)"
+    },
+    {
+        "date": "2026-01-18T20:00:00",
+        "firm": "Exit Polls",
+        "description": "Exit Polls (Católica / Intercampus)"
+    }
+]

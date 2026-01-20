@@ -19,15 +19,23 @@ interface DataPoint {
     p: number;
 }
 
+interface Poll {
+    date: string;
+    firm: string;
+    description: string;
+}
+
 interface SingleChartProps {
     mode: "single";
     data: DataPoint[];
     question: string;
+    polls?: Poll[];
 }
 
 interface MultiChartProps {
     mode: "multi";
     datasets: { id: string; name: string; data: DataPoint[] }[];
+    polls?: Poll[];
 }
 
 type ChartProps = SingleChartProps | MultiChartProps;
@@ -49,7 +57,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                         {(payload[0].value * 100).toFixed(1)}%
                     </p>
                 ) : (
-                    <div className="space-y-1 max-h-60 overflow-auto">
+                    <div className="space-y-1 max-h-60 overflow-auto custom-scrollbar">
                         {payload.sort((a: any, b: any) => b.value - a.value).map((entry: any, idx: number) => (
                             <div key={idx} className="flex justify-between gap-4">
                                 <span style={{ color: entry.color }} className="truncate max-w-[150px]">{entry.name}</span>
@@ -103,7 +111,26 @@ export default function ChartComponents(props: ChartProps) {
                         fontSize={12}
                     />
                     <Tooltip content={<CustomTooltip />} />
-                    <ReferenceLine x={electionTimestamp} stroke="#ef4444" strokeDasharray="3 3" />
+                    <ReferenceLine x={electionTimestamp} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Election', fill: '#ef4444', fontSize: 12 }} />
+                    {props.polls?.map((poll, idx) => {
+                        const pollTs = new Date(poll.date).getTime() / 1000;
+                        return (
+                            <ReferenceLine
+                                key={idx}
+                                x={pollTs}
+                                stroke="#f59e0b"
+                                strokeDasharray="3 3"
+                                strokeOpacity={0.6}
+                                label={{
+                                    position: 'insideTopLeft',
+                                    value: 'ℹ️',
+                                    fontSize: 16,
+                                    fill: '#f59e0b',
+                                    className: "cursor-pointer"
+                                }}
+                            />
+                        );
+                    })}
                     <Line
                         type="monotone"
                         dataKey="p"
@@ -172,7 +199,25 @@ export default function ChartComponents(props: ChartProps) {
                     wrapperStyle={{ paddingTop: 10, fontSize: 11 }}
                     formatter={(value) => <span className="text-slate-300">{value}</span>}
                 />
-                <ReferenceLine x={electionTimestamp} stroke="#ef4444" strokeDasharray="3 3" />
+                <ReferenceLine x={electionTimestamp} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Election', fill: '#ef4444', fontSize: 12 }} />
+                {props.polls?.map((poll, idx) => {
+                    const pollTs = new Date(poll.date).getTime() / 1000;
+                    return (
+                        <ReferenceLine
+                            key={idx}
+                            x={pollTs}
+                            stroke="#f59e0b"
+                            strokeDasharray="3 3"
+                            strokeOpacity={0.6}
+                            label={{
+                                position: 'insideTopLeft',
+                                value: 'ℹ️',
+                                fontSize: 16,
+                                fill: '#f59e0b',
+                            }}
+                        />
+                    );
+                })}
                 {datasets.map((ds, idx) => (
                     <Line
                         key={ds.id}

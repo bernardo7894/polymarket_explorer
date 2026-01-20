@@ -28,14 +28,28 @@ const getBasePath = () => {
     return window.location.hostname.includes('github.io') ? '/polymarket_explorer' : '';
 };
 
+interface Poll {
+    date: string;
+    firm: string;
+    description: string;
+}
+
 export default function Dashboard({ summary }: { summary: Market[] }) {
     const [volumeThreshold, setVolumeThreshold] = useState(0); // Default to 0 to show more, or user preference
     const [sortOrder, setSortOrder] = useState<'default' | 'volume' | 'name'>('default');
     const [viewMode, setViewMode] = useState<'individual' | 'overlay'>('individual');
     const [mounted, setMounted] = useState(false);
+    const [polls, setPolls] = useState<Poll[]>([]);
+    const [showPolls, setShowPolls] = useState(true);
 
     useEffect(() => {
         setMounted(true);
+        // Fetch polls
+        const basePath = getBasePath();
+        fetch(`${basePath}/data/polls.json`)
+            .then(res => res.ok ? res.json() : [])
+            .then(data => setPolls(data))
+            .catch(err => console.error("Failed to load polls:", err));
     }, []);
 
     // Filter and sort summary
@@ -156,6 +170,17 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                             <option value="name">Name (A-Z)</option>
                         </select>
                     </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                        <label className="text-xs text-slate-400">Show Poll Indicators</label>
+                        <button
+                            onClick={() => setShowPolls(!showPolls)}
+                            className={`w-10 h-5 rounded-full transition-colors relative ${showPolls ? 'bg-blue-600' : 'bg-slate-700'}`}
+                        >
+                            <span className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${showPolls ? 'translate-x-5' : ''}`} />
+                        </button>
+                    </div>
+
                     <div>
                         <label className="block text-xs text-slate-400 mb-1">View Mode</label>
                         <div className="flex gap-2">
@@ -216,7 +241,7 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                                 <span className="text-slate-500">Loading all market data...</span>
                             </div>
                         ) : allChartData.length > 0 ? (
-                            <ChartComponents mode="multi" datasets={allChartData} />
+                            <ChartComponents mode="multi" datasets={allChartData} polls={showPolls ? polls : undefined} />
                         ) : (
                             <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800">
                                 <span className="text-slate-500">No data available</span>
@@ -243,7 +268,7 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                                 <span className="text-slate-500">Loading market data...</span>
                             </div>
                         ) : chartData.length > 0 ? (
-                            <ChartComponents mode="single" data={chartData} question={selectedMarket.question} />
+                            <ChartComponents mode="single" data={chartData} question={selectedMarket.question} polls={showPolls ? polls : undefined} />
                         ) : (
                             <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800">
                                 <span className="text-slate-500">No chart data available</span>
