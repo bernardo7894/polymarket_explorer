@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: "/polymarket_explorer",
+  // Only use basePath in production (GitHub Pages)
+  basePath: isProd ? "/polymarket_explorer" : "",
   images: {
     unoptimized: true,
   },
