@@ -1,6 +1,4 @@
-"use client";
-
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
     LineChart,
     Line,
@@ -10,10 +8,11 @@ import {
     Tooltip,
     Legend,
     ReferenceLine,
-    Brush,
+    ReferenceArea,
 } from "recharts";
 import { format } from "date-fns";
 
+// ... (interfaces remain the same: DataPoint, Poll, SingleChartProps, MultiChartProps, ChartProps)
 interface DataPoint {
     t: number;
     p: number;
@@ -46,6 +45,7 @@ const COLORS = [
 ];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
+    // ... (same as before)
     if (active && payload && payload.length) {
         return (
             <div className="bg-slate-800 border border-slate-700 p-3 rounded shadow-lg text-sm">
@@ -75,6 +75,35 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export default function ChartComponents(props: ChartProps) {
     const electionTimestamp = new Date("2026-01-18T00:00:00Z").getTime() / 1000;
 
+    // Zoom state
+    const [left, setLeft] = useState<string | number | null>("dataMin");
+    const [right, setRight] = useState<string | number | null>("dataMax");
+    const [refAreaLeft, setRefAreaLeft] = useState<string | number | null>(null);
+    const [refAreaRight, setRefAreaRight] = useState<string | number | null>(null);
+
+    const zoom = () => {
+        if (refAreaLeft === refAreaRight || refAreaRight === null) {
+            setRefAreaLeft(null);
+            setRefAreaRight(null);
+            return;
+        }
+
+        // Ensure left is smaller than right
+        let l = refAreaLeft;
+        let r = refAreaRight;
+        if ((l as number) > (r as number)) [l, r] = [r, l];
+
+        setRefAreaLeft(null);
+        setRefAreaRight(null);
+        setLeft(l);
+        setRight(r);
+    };
+
+    const zoomOut = () => {
+        setLeft("dataMin");
+        setRight("dataMax");
+    };
+
     if (props.mode === "single") {
         const { data, question } = props;
 
@@ -90,19 +119,40 @@ export default function ChartComponents(props: ChartProps) {
         const maxPrice = Math.max(...data.map((d) => d.p));
 
         return (
-            <div className="w-full bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-2xl">
-                <h2 className="text-xl font-bold text-slate-100 mb-4 truncate" title={question}>
-                    {question}
-                </h2>
-                <LineChart width={900} height={500} data={data}>
+            <div className="w-full bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-2xl select-none">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold text-slate-100 truncate flex-1" title={question}>
+                        {question}
+                    </h2>
+                    <button
+                        onClick={zoomOut}
+                        disabled={left === "dataMin" && right === "dataMax"}
+                        className={`px-3 py-1 rounded text-sm font-medium transition-colors ${left !== "dataMin" || right !== "dataMax"
+                            ? "bg-blue-600 text-white hover:bg-blue-500"
+                            : "bg-slate-800 text-slate-500 cursor-not-allowed"
+                            }`}
+                    >
+                        Reset Zoom
+                    </button>
+                    <span className="text-xs text-slate-500 ml-3">Drag to zoom</span>
+                </div>
+                <LineChart
+                    width={900}
+                    height={500}
+                    data={data}
+                    onMouseDown={(e) => e && setRefAreaLeft(e.activeLabel as string)}
+                    onMouseMove={(e) => refAreaLeft && e && setRefAreaRight(e.activeLabel as string)}
+                    onMouseUp={zoom}
+                >
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                     <XAxis
                         dataKey="t"
                         type="number"
-                        domain={['dataMin', 'dataMax']}
+                        domain={[left || 'dataMin', right || 'dataMax']}
                         tickFormatter={(unixTime) => format(new Date(unixTime * 1000), "d MMM")}
                         stroke="#94a3b8"
                         fontSize={12}
+                        allowDataOverflow
                     />
                     <YAxis
                         domain={[Math.max(0, minPrice * 0.8), Math.min(1, maxPrice * 1.2)]}
@@ -114,6 +164,7 @@ export default function ChartComponents(props: ChartProps) {
                     <ReferenceLine x={electionTimestamp} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Election', fill: '#ef4444', fontSize: 12 }} />
                     {props.polls?.map((poll, idx) => {
                         const pollTs = new Date(poll.date).getTime() / 1000;
+                        // Only render if within current domain (optional optimization, but simple check)
                         return (
                             <ReferenceLine
                                 key={idx}
@@ -131,20 +182,19 @@ export default function ChartComponents(props: ChartProps) {
                             />
                         );
                     })}
+
+                    {/* Selection Area */}
+                    {refAreaLeft && refAreaRight ? (
+                        <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} fill="#3b82f6" fillOpacity={0.3} />
+                    ) : null}
+
                     <Line
                         type="monotone"
                         dataKey="p"
                         stroke="#10b981"
                         strokeWidth={2}
-                        dot={false}
+                        dot={left !== "dataMin"} // Show dots when zoomed in
                         animationDuration={300}
-                    />
-                    <Brush
-                        dataKey="t"
-                        height={30}
-                        stroke="#334155"
-                        fill="#1e293b"
-                        tickFormatter={(unixTime) => format(new Date(unixTime * 1000), "d MMM")}
                     />
                 </LineChart>
             </div>
@@ -176,17 +226,38 @@ export default function ChartComponents(props: ChartProps) {
     }
 
     return (
-        <div className="w-full bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-2xl">
-            <h2 className="text-xl font-bold text-slate-100 mb-4">All Candidates Comparison</h2>
-            <LineChart width={1000} height={550} data={mergedData}>
+        <div className="w-full bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-2xl select-none">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-slate-100">All Candidates Comparison</h2>
+                <button
+                    onClick={zoomOut}
+                    disabled={left === "dataMin" && right === "dataMax"}
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${left !== "dataMin" || right !== "dataMax"
+                        ? "bg-blue-600 text-white hover:bg-blue-500"
+                        : "bg-slate-800 text-slate-500 cursor-not-allowed"
+                        }`}
+                >
+                    Reset Zoom
+                </button>
+                <span className="text-xs text-slate-500 ml-3">Drag to zoom</span>
+            </div>
+            <LineChart
+                width={1000}
+                height={550}
+                data={mergedData}
+                onMouseDown={(e) => e && setRefAreaLeft(e.activeLabel as string)}
+                onMouseMove={(e) => refAreaLeft && e && setRefAreaRight(e.activeLabel as string)}
+                onMouseUp={zoom}
+            >
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis
                     dataKey="t"
                     type="number"
-                    domain={['dataMin', 'dataMax']}
+                    domain={[left || 'dataMin', right || 'dataMax']}
                     tickFormatter={(unixTime) => format(new Date(unixTime * 1000), "d MMM HH:mm")}
                     stroke="#94a3b8"
                     fontSize={11}
+                    allowDataOverflow
                 />
                 <YAxis
                     domain={[0, 'auto']}
@@ -218,6 +289,12 @@ export default function ChartComponents(props: ChartProps) {
                         />
                     );
                 })}
+
+                {/* Selection Area */}
+                {refAreaLeft && refAreaRight ? (
+                    <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} fill="#3b82f6" fillOpacity={0.3} />
+                ) : null}
+
                 {datasets.map((ds, idx) => (
                     <Line
                         key={ds.id}
@@ -226,18 +303,11 @@ export default function ChartComponents(props: ChartProps) {
                         name={ds.name}
                         stroke={COLORS[idx % COLORS.length]}
                         strokeWidth={2}
-                        dot={false}
+                        dot={left !== "dataMin"}
                         animationDuration={300}
                         connectNulls
                     />
                 ))}
-                <Brush
-                    dataKey="t"
-                    height={30}
-                    stroke="#334155"
-                    fill="#1e293b"
-                    tickFormatter={(unixTime) => format(new Date(unixTime * 1000), "d MMM")}
-                />
             </LineChart>
         </div>
     );
