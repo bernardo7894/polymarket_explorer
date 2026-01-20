@@ -193,8 +193,8 @@ export default function ChartComponents(props: ChartProps) {
                         dataKey="p"
                         stroke="#10b981"
                         strokeWidth={2}
-                        dot={left !== "dataMin"} // Show dots when zoomed in
-                        animationDuration={300}
+                        dot={false}
+                        animationDuration={left === "dataMin" ? 300 : 0}
                     />
                 </LineChart>
             </div>
@@ -303,8 +303,8 @@ export default function ChartComponents(props: ChartProps) {
                         name={ds.name}
                         stroke={COLORS[idx % COLORS.length]}
                         strokeWidth={2}
-                        dot={left !== "dataMin"}
-                        animationDuration={300}
+                        dot={false}
+                        animationDuration={left === "dataMin" ? 300 : 0}
                         connectNulls
                     />
                 ))}
