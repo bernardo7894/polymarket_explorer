@@ -44,6 +44,19 @@ const COLORS = [
     "#ec4899", "#14b8a6", "#f97316", "#6366f1", "#84cc16"
 ];
 
+const PollLabel = (props: any) => {
+    const { viewBox, poll } = props;
+    const { x, y } = viewBox;
+    return (
+        <g transform={`translate(${x},${y})`}>
+            <text x={10} y={20} fontSize={16} fill="#f59e0b" className="cursor-pointer" style={{ pointerEvents: 'all' }}>
+                ℹ️
+                <title>{`${poll.firm} (${format(new Date(poll.date), "MMM d, HH:mm")}): ${poll.description}`}</title>
+            </text>
+        </g>
+    );
+};
+
 const CustomTooltip = ({ active, payload, label }: any) => {
     // ... (same as before)
     if (active && payload && payload.length) {
@@ -172,13 +185,7 @@ export default function ChartComponents(props: ChartProps) {
                                 stroke="#f59e0b"
                                 strokeDasharray="3 3"
                                 strokeOpacity={0.6}
-                                label={{
-                                    position: 'insideTopLeft',
-                                    value: 'ℹ️',
-                                    fontSize: 16,
-                                    fill: '#f59e0b',
-                                    className: "cursor-pointer"
-                                }}
+                                label={<PollLabel poll={poll} />}
                             />
                         );
                     })}
@@ -280,12 +287,7 @@ export default function ChartComponents(props: ChartProps) {
                             stroke="#f59e0b"
                             strokeDasharray="3 3"
                             strokeOpacity={0.6}
-                            label={{
-                                position: 'insideTopLeft',
-                                value: 'ℹ️',
-                                fontSize: 16,
-                                fill: '#f59e0b',
-                            }}
+                            label={<PollLabel poll={poll} />}
                         />
                     );
                 })}
