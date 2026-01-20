@@ -28,7 +28,8 @@ const getBasePath = () => {
 };
 
 export default function Dashboard({ summary }: { summary: Market[] }) {
-    const [volumeThreshold, setVolumeThreshold] = useState(100000);
+    const [volumeThreshold, setVolumeThreshold] = useState(0); // Default to 0 to show more, or user preference
+    const [sortOrder, setSortOrder] = useState<'default' | 'volume' | 'name'>('default');
     const [viewMode, setViewMode] = useState<'individual' | 'overlay'>('individual');
     const [mounted, setMounted] = useState(false);
 
@@ -36,12 +37,18 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
         setMounted(true);
     }, []);
 
-    // Sort and filter summary by volume descending
+    // Filter and sort summary
     const sortedSummary = useMemo(() => {
-        return [...summary]
-            .filter(m => m.points > 0 && parseFloat(m.volume) >= volumeThreshold)
-            .sort((a, b) => parseFloat(b.volume) - parseFloat(a.volume));
-    }, [summary, volumeThreshold]);
+        const filtered = [...summary]
+            .filter(m => m.points > 0 && parseFloat(m.volume) >= volumeThreshold);
+
+        if (sortOrder === 'volume') {
+            return filtered.sort((a, b) => parseFloat(b.volume) - parseFloat(a.volume));
+        } else if (sortOrder === 'name') {
+            return filtered.sort((a, b) => a.question.localeCompare(b.question));
+        }
+        return filtered; // 'default' - keeps original order
+    }, [summary, volumeThreshold, sortOrder]);
 
     const [selectedId, setSelectedId] = useState<string>("");
     const [chartData, setChartData] = useState<DataPoint[]>([]);
@@ -136,13 +143,25 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                         </select>
                     </div>
                     <div>
+                        <label className="block text-xs text-slate-400 mb-1">Sort Order</label>
+                        <select
+                            value={sortOrder}
+                            onChange={(e) => setSortOrder(e.target.value as any)}
+                            className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="default">Original</option>
+                            <option value="volume">Volume (High to Low)</option>
+                            <option value="name">Name (A-Z)</option>
+                        </select>
+                    </div>
+                    <div>
                         <label className="block text-xs text-slate-400 mb-1">View Mode</label>
                         <div className="flex gap-2">
                             <button
                                 onClick={() => setViewMode('individual')}
                                 className={`flex-1 px-3 py-2 text-sm rounded transition-colors ${viewMode === 'individual'
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                     }`}
                             >
                                 Individual
@@ -150,8 +169,8 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                             <button
                                 onClick={() => setViewMode('overlay')}
                                 className={`flex-1 px-3 py-2 text-sm rounded transition-colors ${viewMode === 'overlay'
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                     }`}
                             >
                                 Overlay
@@ -168,8 +187,8 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                             key={market.id}
                             onClick={() => { setSelectedId(market.id); setViewMode('individual'); }}
                             className={`w-full text-left p-3 rounded-lg transition-all duration-200 border ${selectedId === market.id && viewMode === 'individual'
-                                    ? "bg-slate-800 border-blue-500 text-white shadow-md shadow-blue-900/20"
-                                    : "bg-slate-900/50 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+                                ? "bg-slate-800 border-blue-500 text-white shadow-md shadow-blue-900/20"
+                                : "bg-slate-900/50 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
                                 }`}
                         >
                             <div className="text-sm font-medium line-clamp-2">{market.question}</div>
