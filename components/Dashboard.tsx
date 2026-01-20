@@ -28,7 +28,7 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
     useEffect(() => {
         if (selectedId) {
             setLoading(true);
-            fetch(`/data/history_${selectedId}.json`)
+            fetch(`/polymarket_explorer/data/history_${selectedId}.json`)
                 .then((res) => {
                     if (!res.ok) throw new Error("Failed to fetch");
                     return res.json();
@@ -60,8 +60,8 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                             key={market.id}
                             onClick={() => setSelectedId(market.id)}
                             className={`w-full text-left p-3 rounded-lg transition-all duration-200 border ${selectedId === market.id
-                                    ? "bg-slate-800 border-blue-500 text-white shadow-md shadow-blue-900/20"
-                                    : "bg-slate-900/50 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+                                ? "bg-slate-800 border-blue-500 text-white shadow-md shadow-blue-900/20"
+                                : "bg-slate-900/50 border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
                                 }`}
                         >
                             <div className="text-sm font-medium line-clamp-2">{market.question}</div>
