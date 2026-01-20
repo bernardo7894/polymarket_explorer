@@ -14,6 +14,7 @@ interface Market {
     question: string;
     points: number;
     volume: string;
+    currentPrice?: number;
 }
 
 interface DataPoint {
@@ -47,7 +48,8 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
         } else if (sortOrder === 'name') {
             return filtered.sort((a, b) => a.question.localeCompare(b.question));
         }
-        return filtered; // 'default' - keeps original order
+        // 'default' - sorts by current price (odds) descending
+        return filtered.sort((a, b) => (b.currentPrice || 0) - (a.currentPrice || 0));
     }, [summary, volumeThreshold, sortOrder]);
 
     const [selectedId, setSelectedId] = useState<string>("");

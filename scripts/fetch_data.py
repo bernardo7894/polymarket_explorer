@@ -102,12 +102,25 @@ def main():
             with open(filename, "w") as f:
                 json.dump(history, f)
             
+            # Extract current price/probability (for YES token)
+            outcome_prices = market.get('outcomePrices', [])
+            if isinstance(outcome_prices, str):
+                try:
+                    outcome_prices = json.loads(outcome_prices)
+                except:
+                    outcome_prices = []
+            
+            current_price = 0
+            if outcome_prices and len(outcome_prices) > 0:
+                current_price = float(outcome_prices[0])
+
             stats.append({
                 "id": market["id"],
                 "question": question,
                 "token_id": yes_token_id,
                 "points": len(points),
-                "volume": market.get("volume", 0)
+                "volume": market.get("volume", 0),
+                "currentPrice": current_price
             })
         else:
             print("  No history.")
