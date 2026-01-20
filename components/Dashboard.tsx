@@ -1,7 +1,13 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import MarketChart, { MultiMarketChart } from "./MarketChart";
+import { useState, useEffect, useMemo, useRef } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import chart to avoid SSR issues
+const ChartComponents = dynamic(() => import("./ChartComponents"), {
+    ssr: false,
+    loading: () => <div className="h-[600px] bg-slate-900 rounded-xl flex items-center justify-center text-slate-500">Loading chart...</div>
+});
 
 interface Market {
     id: string;
@@ -16,13 +22,19 @@ interface DataPoint {
 }
 
 // Determine base path: empty for local dev, /polymarket_explorer for GitHub Pages
-const BASE_PATH = typeof window !== 'undefined' && window.location.hostname.includes('github.io')
-    ? '/polymarket_explorer'
-    : '';
+const getBasePath = () => {
+    if (typeof window === 'undefined') return '';
+    return window.location.hostname.includes('github.io') ? '/polymarket_explorer' : '';
+};
 
 export default function Dashboard({ summary }: { summary: Market[] }) {
-    const [volumeThreshold, setVolumeThreshold] = useState(100000); // $100k minimum volume
+    const [volumeThreshold, setVolumeThreshold] = useState(100000);
     const [viewMode, setViewMode] = useState<'individual' | 'overlay'>('individual');
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Sort and filter summary by volume descending
     const sortedSummary = useMemo(() => {
@@ -48,9 +60,11 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
 
     // Fetch individual chart data
     useEffect(() => {
+        if (!mounted) return;
         if (selectedId && viewMode === 'individual') {
             setLoading(true);
-            fetch(`${BASE_PATH}/data/history_${selectedId}.json`)
+            const basePath = getBasePath();
+            fetch(`${basePath}/data/history_${selectedId}.json`)
                 .then((res) => {
                     if (!res.ok) throw new Error("Failed to fetch");
                     return res.json();
@@ -65,21 +79,23 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                     setChartData([]);
                 });
         }
-    }, [selectedId, viewMode]);
+    }, [selectedId, viewMode, mounted]);
 
     // Fetch all data for overlay mode
     useEffect(() => {
+        if (!mounted) return;
         if (viewMode === 'overlay' && sortedSummary.length > 0) {
             setOverlayLoading(true);
-            const fetchPromises = sortedSummary.slice(0, 10).map(market => // Limit to top 10
-                fetch(`${BASE_PATH}/data/history_${market.id}.json`)
+            const basePath = getBasePath();
+            const fetchPromises = sortedSummary.slice(0, 8).map(market =>
+                fetch(`${basePath}/data/history_${market.id}.json`)
                     .then(res => res.ok ? res.json() : { history: [] })
                     .then(data => ({
                         id: market.id,
                         name: market.question.replace(/Will |win the 2026 Portugal presidential election\?/g, '').trim(),
-                        data: data.history || []
+                        data: (data.history || []) as DataPoint[]
                     }))
-                    .catch(() => ({ id: market.id, name: market.question, data: [] }))
+                    .catch(() => ({ id: market.id, name: market.question, data: [] as DataPoint[] }))
             );
 
             Promise.all(fetchPromises).then(results => {
@@ -87,9 +103,13 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                 setOverlayLoading(false);
             });
         }
-    }, [viewMode, sortedSummary]);
+    }, [viewMode, sortedSummary, mounted]);
 
     const selectedMarket = sortedSummary.find((m) => m.id === selectedId);
+
+    if (!mounted) {
+        return <div className="h-screen bg-slate-950 flex items-center justify-center text-slate-500">Loading...</div>;
+    }
 
     return (
         <div className="flex h-screen bg-slate-950 text-slate-200">
@@ -171,11 +191,15 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                             <p className="text-slate-400">Comparing top {allChartData.length} candidates by volume. Use the slider to zoom.</p>
                         </div>
                         {overlayLoading ? (
-                            <div className="h-[700px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800 animate-pulse">
+                            <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800 animate-pulse">
                                 <span className="text-slate-500">Loading all market data...</span>
                             </div>
+                        ) : allChartData.length > 0 ? (
+                            <ChartComponents mode="multi" datasets={allChartData} />
                         ) : (
-                            <MultiMarketChart datasets={allChartData} />
+                            <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800">
+                                <span className="text-slate-500">No data available</span>
+                            </div>
                         )}
                     </div>
                 ) : selectedMarket ? (
@@ -197,8 +221,12 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                             <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800 animate-pulse">
                                 <span className="text-slate-500">Loading market data...</span>
                             </div>
+                        ) : chartData.length > 0 ? (
+                            <ChartComponents mode="single" data={chartData} question={selectedMarket.question} />
                         ) : (
-                            <MarketChart data={chartData} question={selectedMarket.question} />
+                            <div className="h-[600px] flex items-center justify-center bg-slate-900/50 rounded-xl border border-slate-800">
+                                <span className="text-slate-500">No chart data available</span>
+                            </div>
                         )}
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
