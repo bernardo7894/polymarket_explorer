@@ -87,21 +87,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return null;
 };
 
-// Helper to downsample data by time resolution
-const downsample = (data: any[], left: number | string | null, right: number | string | null, targetResMinutes = 30) => {
+// Helper to downsample data by visual density (target points in view)
+const downsample = (data: any[], left: number | string | null, right: number | string | null, targetPoints: number) => {
     if (!data || data.length === 0) return [];
-
-    // If full resolution requested (1m), just return slice to avoid logic overhead
-    if (targetResMinutes <= 1) {
-        // Logic to slice data based on left/right if they are numbers
-        if (typeof left === 'number' || typeof right === 'number') {
-            return data.filter(d =>
-                (typeof left !== 'number' || d.t >= left) &&
-                (typeof right !== 'number' || d.t <= right)
-            );
-        }
-        return data;
-    }
 
     // Identify range indices
     const startIdx = typeof left === 'number' ? data.findIndex(d => d.t >= left) : 0;
@@ -109,24 +97,31 @@ const downsample = (data: any[], left: number | string | null, right: number | s
 
     const sliceStart = startIdx === -1 ? 0 : startIdx;
     const sliceEnd = endIdx === -1 ? data.length : endIdx;
+    const sliceLength = sliceEnd - sliceStart;
 
-    const result = [];
-    const strideSeconds = targetResMinutes * 60;
-    let lastT = 0;
-
-    for (let i = sliceStart; i < sliceEnd; i++) {
-        const point = data[i];
-        if (i === sliceStart || i === sliceEnd - 1 || (point.t - lastT) >= strideSeconds) {
-            result.push(point);
-            lastT = point.t;
-        }
+    // IF visible points < targetPoints, show all of them (auto-scaling resolution)
+    if (sliceLength <= targetPoints) {
+        return data.slice(sliceStart, sliceEnd);
     }
+
+    // Otherwise stride to maintain target density
+    const stride = Math.ceil(sliceLength / targetPoints);
+    const result = [];
+
+    for (let i = sliceStart; i < sliceEnd; i += stride) {
+        result.push(data[i]);
+    }
+
+    // Always include the last point of the slice to prevent gaps at right edge
+    if (sliceLength > 0 && (result.length === 0 || result[result.length - 1] !== data[sliceEnd - 1])) {
+        result.push(data[sliceEnd - 1]);
+    }
+
     return result;
 };
 
 export default function ChartComponents(props: ChartProps) {
     // Election Day: Jan 18, 2026. Polls Open 8:00 AM, Close 7:00 PM (19:00)
-    // Assuming UTC for simplification as data is likely UTC or we align with source
     const electionDayStart = new Date("2026-01-18T08:00:00Z").getTime() / 1000;
     const electionDayEnd = new Date("2026-01-18T19:00:00Z").getTime() / 1000;
 
@@ -170,16 +165,28 @@ export default function ChartComponents(props: ChartProps) {
             );
         }
 
-        // Create display data based on zoom level
+        // Create display data based on zoom level and "base resolution" slider
         const displayData = useMemo(() => {
-            return downsample(data, left, right, props.detailLevel || 600);
+            // Slider value (props.detailLevel) is "Minutes per Point" desired at FULL scale.
+            // We need to convert this to "Target Points" (Visual Density) so zooming works.
+            // data spans ~14 days usually.
+            if (!data.length) return [];
+            const fullDurationMinutes = (data[data.length - 1].t - data[0].t) / 60;
+            const desiredResMinutes = props.detailLevel || 30;
+
+            // If slider is set to 1 (full), target is infinity (show all)
+            const targetVisualPoints = desiredResMinutes <= 1
+                ? Infinity
+                : Math.ceil(fullDurationMinutes / desiredResMinutes);
+
+            return downsample(data, left, right, targetVisualPoints);
         }, [data, left, right, props.detailLevel]);
 
         // Calculate info string
         const infoString = useMemo(() => {
             if (displayData.length < 2) return "";
             const avgInterval = (displayData[displayData.length - 1].t - displayData[0].t) / displayData.length;
-            const mins = Math.round(avgInterval / 60);
+            const mins = Math.max(1, Math.round(avgInterval / 60)); // Ensure at least 1m
             return `Showing ${displayData.length} pts (~1pt/${mins}m)`;
         }, [displayData]);
 
@@ -284,13 +291,21 @@ export default function ChartComponents(props: ChartProps) {
 
     // Downsample merged data
     const displayData = useMemo(() => {
-        return downsample(mergedData, left, right, props.detailLevel || 600);
+        if (!mergedData.length) return [];
+        const fullDurationMinutes = (mergedData[mergedData.length - 1].t - mergedData[0].t) / 60;
+        const desiredResMinutes = props.detailLevel || 30;
+
+        const targetVisualPoints = desiredResMinutes <= 1
+            ? Infinity
+            : Math.ceil(fullDurationMinutes / desiredResMinutes);
+
+        return downsample(mergedData, left, right, targetVisualPoints);
     }, [mergedData, left, right, props.detailLevel]);
 
     const infoString = useMemo(() => {
         if (displayData.length < 2) return "";
         const avgInterval = (displayData[displayData.length - 1].t - displayData[0].t) / displayData.length;
-        const mins = Math.round(avgInterval / 60);
+        const mins = Math.max(1, Math.round(avgInterval / 60));
         return `Showing ${displayData.length} pts (~1pt/${mins}m)`;
     }, [displayData]);
 
