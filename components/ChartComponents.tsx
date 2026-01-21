@@ -63,7 +63,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     // ... (same as before)
     if (active && payload && payload.length) {
         return (
-            <div className="bg-slate-800 border border-slate-700 p-3 rounded shadow-lg text-sm">
+            <div className="bg-slate-900/80 backdrop-blur-md border border-slate-700 p-3 rounded shadow-lg text-sm">
                 <p className="text-slate-300 mb-2 border-b border-slate-700 pb-1">
                     {format(new Date(label * 1000), "MMM d, HH:mm")}
                 </p>
