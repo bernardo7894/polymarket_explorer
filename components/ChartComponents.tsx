@@ -277,18 +277,51 @@ const MultiChart = (props: MultiChartProps) => {
     const electionDayStart = new Date("2026-01-18T08:00:00Z").getTime() / 1000;
     const electionDayEnd = new Date("2026-01-18T19:00:00Z").getTime() / 1000;
 
-    // Merge data - Hook always called
+    // Merge data with Forward Fill
+    // This ensures that at any timestamp T, we have values for ALL candidates (carrying over their last known price).
+    // Without this, the Tooltip only shows candidates that traded strictly at timestamp T.
     const mergedData = useMemo(() => {
-        const mergedMap = new Map<number, any>();
-        datasets.forEach((ds) => {
-            ds.data.forEach((point) => {
-                if (!mergedMap.has(point.t)) {
-                    mergedMap.set(point.t, { t: point.t });
-                }
-                mergedMap.get(point.t)![ds.id] = point.p;
+        const allPoints: { t: number; id: string; p: number }[] = [];
+        datasets.forEach(ds => {
+            ds.data.forEach(pt => {
+                allPoints.push({ t: pt.t, id: ds.id, p: pt.p });
             });
         });
-        return Array.from(mergedMap.values()).sort((a, b) => a.t - b.t);
+
+        // Sort chronologically
+        allPoints.sort((a, b) => a.t - b.t);
+
+        const result: any[] = [];
+        const lastKnownValues: Record<string, number> = {};
+
+        let currentTimestamp = -1;
+        let currentObj: any = null;
+
+        for (const point of allPoints) {
+            if (point.t !== currentTimestamp) {
+                // Finished collecting updates for the previous timestamp, push it
+                if (currentObj) {
+                    result.push(currentObj);
+                }
+
+                // Start a new row for this new timestamp
+                currentTimestamp = point.t;
+                // Pre-fill with all last known values (Forward Fill)
+                currentObj = { t: currentTimestamp, ...lastKnownValues };
+            }
+
+            // Update the value for this specific market at this timestamp
+            currentObj[point.id] = point.p;
+            // Update our persistent state
+            lastKnownValues[point.id] = point.p;
+        }
+
+        // Push the final pending object
+        if (currentObj) {
+            result.push(currentObj);
+        }
+
+        return result;
     }, [datasets]);
 
     // Downsample - Hook always called
