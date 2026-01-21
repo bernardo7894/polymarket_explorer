@@ -120,14 +120,10 @@ const downsample = (data: any[], left: number | string | null, right: number | s
     return result;
 };
 
-export default function ChartComponents(props: ChartProps) {
-    // Election Day: Jan 18, 2026. Polls Open 8:00 AM, Close 7:00 PM (19:00)
-    const electionDayStart = new Date("2026-01-18T08:00:00Z").getTime() / 1000;
-    const electionDayEnd = new Date("2026-01-18T19:00:00Z").getTime() / 1000;
-
-    // Zoom state
-    const [left, setLeft] = useState<string | number | null>("dataMin");
-    const [right, setRight] = useState<string | number | null>("dataMax");
+// Re-use zoom logic hook to avoid duplication
+const useChartZoom = (initialLeft: string | number | null = "dataMin", initialRight: string | number | null = "dataMax") => {
+    const [left, setLeft] = useState<string | number | null>(initialLeft);
+    const [right, setRight] = useState<string | number | null>(initialRight);
     const [refAreaLeft, setRefAreaLeft] = useState<string | number | null>(null);
     const [refAreaRight, setRefAreaRight] = useState<string | number | null>(null);
 
@@ -137,12 +133,9 @@ export default function ChartComponents(props: ChartProps) {
             setRefAreaRight(null);
             return;
         }
-
-        // Ensure left is smaller than right
         let l = refAreaLeft;
         let r = refAreaRight;
         if ((l as number) > (r as number)) [l, r] = [r, l];
-
         setRefAreaLeft(null);
         setRefAreaRight(null);
         setLeft(l);
@@ -154,128 +147,137 @@ export default function ChartComponents(props: ChartProps) {
         setRight("dataMax");
     };
 
-    if (props.mode === "single") {
-        const { data, question } = props;
+    return { left, right, refAreaLeft, refAreaRight, setRefAreaLeft, setRefAreaRight, zoom, zoomOut };
+};
 
-        if (!data || data.length === 0) {
-            return (
-                <div className="w-full h-[600px] bg-slate-900 rounded-xl p-4 border border-slate-800 flex items-center justify-center">
-                    <span className="text-slate-500">No data available</span>
-                </div>
-            );
-        }
+const SingleChart = (props: SingleChartProps) => {
+    const { data, question, polls, detailLevel } = props;
+    const { left, right, refAreaLeft, refAreaRight, setRefAreaLeft, setRefAreaRight, zoom, zoomOut } = useChartZoom();
 
-        // Create display data based on zoom level and "base resolution" slider
-        const displayData = useMemo(() => {
-            // Slider value (props.detailLevel) is "Minutes per Point" desired at FULL scale.
-            // We need to convert this to "Target Points" (Visual Density) so zooming works.
-            // data spans ~14 days usually.
-            if (!data.length) return [];
-            const fullDurationMinutes = (data[data.length - 1].t - data[0].t) / 60;
-            const desiredResMinutes = props.detailLevel || 30;
+    // Election Day Markers
+    const electionDayStart = new Date("2026-01-18T08:00:00Z").getTime() / 1000;
+    const electionDayEnd = new Date("2026-01-18T19:00:00Z").getTime() / 1000;
 
-            // If slider is set to 1 (full), target is infinity (show all)
-            const targetVisualPoints = desiredResMinutes <= 1
-                ? Infinity
-                : Math.ceil(fullDurationMinutes / desiredResMinutes);
+    // Create display data - always call hooks unconditionally
+    const displayData = useMemo(() => {
+        if (!data || data.length === 0) return [];
+        const fullDurationMinutes = (data[data.length - 1].t - data[0].t) / 60;
+        const desiredResMinutes = detailLevel || 30;
 
-            return downsample(data, left, right, targetVisualPoints);
-        }, [data, left, right, props.detailLevel]);
+        const targetVisualPoints = desiredResMinutes <= 1
+            ? Infinity
+            : Math.ceil(fullDurationMinutes / desiredResMinutes);
 
-        // Calculate info string
-        const infoString = useMemo(() => {
-            if (displayData.length < 2) return "";
-            const avgInterval = (displayData[displayData.length - 1].t - displayData[0].t) / displayData.length;
-            const mins = Math.max(1, Math.round(avgInterval / 60)); // Ensure at least 1m
-            return `Showing ${displayData.length} pts (~1pt/${mins}m)`;
-        }, [displayData]);
+        return downsample(data, left, right, targetVisualPoints);
+    }, [data, left, right, detailLevel]);
 
+    const infoString = useMemo(() => {
+        if (!displayData || displayData.length < 2) return "";
+        const avgInterval = (displayData[displayData.length - 1].t - displayData[0].t) / displayData.length;
+        const mins = Math.max(1, Math.round(avgInterval / 60));
+        return `Showing ${displayData.length} pts (~1pt/${mins}m)`;
+    }, [displayData]);
+
+    const range = useMemo(() => {
+        if (!data || !data.length) return { min: 0, max: 1 };
         const minPrice = Math.min(...data.map((d) => d.p));
         const maxPrice = Math.max(...data.map((d) => d.p));
+        return { min: minPrice, max: maxPrice };
+    }, [data]);
 
+    // Conditional rendering AFTER hooks
+    if (!data || data.length === 0) {
         return (
-            <div className="w-full bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-2xl select-none">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold text-slate-100 truncate flex-1" title={question}>
-                        {question}
-                        <span className="ml-3 text-xs font-normal text-slate-500">{infoString}</span>
-                    </h2>
-                    <button
-                        onClick={zoomOut}
-                        disabled={left === "dataMin" && right === "dataMax"}
-                        className={`px-3 py-1 rounded text-sm font-medium transition-colors ${left !== "dataMin" || right !== "dataMax"
-                            ? "bg-blue-600 text-white hover:bg-blue-500"
-                            : "bg-slate-800 text-slate-500 cursor-not-allowed"
-                            }`}
-                    >
-                        Reset Zoom
-                    </button>
-                    <span className="text-xs text-slate-500 ml-3">Drag to zoom</span>
-                </div>
-                <LineChart
-                    width={900}
-                    height={500}
-                    data={displayData}
-                    onMouseDown={(e) => e && setRefAreaLeft(e.activeLabel as string)}
-                    onMouseMove={(e) => refAreaLeft && e && setRefAreaRight(e.activeLabel as string)}
-                    onMouseUp={zoom}
-                >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis
-                        dataKey="t"
-                        type="number"
-                        domain={[left || 'dataMin', right || 'dataMax']}
-                        tickFormatter={(unixTime) => format(new Date(unixTime * 1000), "d MMM")}
-                        stroke="#94a3b8"
-                        fontSize={12}
-                        allowDataOverflow
-                    />
-                    <YAxis
-                        domain={[Math.max(0, minPrice * 0.8), Math.min(1, maxPrice * 1.2)]}
-                        tickFormatter={(val) => `${(val * 100).toFixed(0)}%`}
-                        stroke="#94a3b8"
-                        fontSize={12}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <ReferenceLine x={electionDayStart} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Open', fill: '#ef4444', fontSize: 12 }} />
-                    <ReferenceLine x={electionDayEnd} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Close', fill: '#ef4444', fontSize: 12 }} />
-                    {props.polls?.map((poll, idx) => {
-                        const pollTs = new Date(poll.date).getTime() / 1000;
-                        // Only render if within current domain (optional optimization, but simple check)
-                        return (
-                            <ReferenceLine
-                                key={idx}
-                                x={pollTs}
-                                stroke="#f59e0b"
-                                strokeDasharray="3 3"
-                                strokeOpacity={0.6}
-                                label={<PollLabel poll={poll} />}
-                            />
-                        );
-                    })}
-
-                    {/* Selection Area */}
-                    {refAreaLeft && refAreaRight ? (
-                        <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} fill="#3b82f6" fillOpacity={0.3} />
-                    ) : null}
-
-                    <Line
-                        type="monotone"
-                        dataKey="p"
-                        stroke="#10b981"
-                        strokeWidth={2}
-                        dot={false}
-                        animationDuration={left === "dataMin" ? 300 : 0}
-                    />
-                </LineChart>
+            <div className="w-full h-[600px] bg-slate-900 rounded-xl p-4 border border-slate-800 flex items-center justify-center">
+                <span className="text-slate-500">No data available</span>
             </div>
         );
     }
 
-    // Multi-chart mode
-    const { datasets } = props;
+    return (
+        <div className="w-full bg-slate-900 rounded-xl p-4 border border-slate-800 shadow-2xl select-none">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-slate-100 truncate flex-1" title={question}>
+                    {question}
+                    <span className="ml-3 text-xs font-normal text-slate-500">{infoString}</span>
+                </h2>
+                <button
+                    onClick={zoomOut}
+                    disabled={left === "dataMin" && right === "dataMax"}
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${left !== "dataMin" || right !== "dataMax"
+                        ? "bg-blue-600 text-white hover:bg-blue-500"
+                        : "bg-slate-800 text-slate-500 cursor-not-allowed"
+                        }`}
+                >
+                    Reset Zoom
+                </button>
+                <span className="text-xs text-slate-500 ml-3">Drag to zoom</span>
+            </div>
+            <LineChart
+                width={900}
+                height={500}
+                data={displayData}
+                onMouseDown={(e) => e && setRefAreaLeft(e.activeLabel as string)}
+                onMouseMove={(e) => refAreaLeft && e && setRefAreaRight(e.activeLabel as string)}
+                onMouseUp={zoom}
+            >
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                <XAxis
+                    dataKey="t"
+                    type="number"
+                    domain={[left || 'dataMin', right || 'dataMax']}
+                    tickFormatter={(unixTime) => format(new Date(unixTime * 1000), "d MMM")}
+                    stroke="#94a3b8"
+                    fontSize={12}
+                    allowDataOverflow
+                />
+                <YAxis
+                    domain={[Math.max(0, range.min * 0.8), Math.min(1, range.max * 1.2)]}
+                    tickFormatter={(val) => `${(val * 100).toFixed(0)}%`}
+                    stroke="#94a3b8"
+                    fontSize={12}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <ReferenceLine x={electionDayStart} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Open', fill: '#ef4444', fontSize: 12 }} />
+                <ReferenceLine x={electionDayEnd} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Close', fill: '#ef4444', fontSize: 12 }} />
+                {polls?.map((poll, idx) => {
+                    const pollTs = new Date(poll.date).getTime() / 1000;
+                    return (
+                        <ReferenceLine
+                            key={idx}
+                            x={pollTs}
+                            stroke="#f59e0b"
+                            strokeDasharray="3 3"
+                            strokeOpacity={0.6}
+                            label={<PollLabel poll={poll} />}
+                        />
+                    );
+                })}
+                {refAreaLeft && refAreaRight ? (
+                    <ReferenceArea x1={refAreaLeft} x2={refAreaRight} strokeOpacity={0.3} fill="#3b82f6" fillOpacity={0.3} />
+                ) : null}
+                <Line
+                    type="monotone"
+                    dataKey="p"
+                    stroke="#10b981"
+                    strokeWidth={2}
+                    dot={false}
+                    animationDuration={left === "dataMin" ? 300 : 0}
+                />
+            </LineChart>
+        </div>
+    );
+};
 
+const MultiChart = (props: MultiChartProps) => {
+    const { datasets, polls, detailLevel } = props;
+    const { left, right, refAreaLeft, refAreaRight, setRefAreaLeft, setRefAreaRight, zoom, zoomOut } = useChartZoom();
+
+    // Election Day Markers
+    const electionDayStart = new Date("2026-01-18T08:00:00Z").getTime() / 1000;
+    const electionDayEnd = new Date("2026-01-18T19:00:00Z").getTime() / 1000;
+
+    // Merge data - Hook always called
     const mergedData = useMemo(() => {
         const mergedMap = new Map<number, any>();
         datasets.forEach((ds) => {
@@ -289,21 +291,21 @@ export default function ChartComponents(props: ChartProps) {
         return Array.from(mergedMap.values()).sort((a, b) => a.t - b.t);
     }, [datasets]);
 
-    // Downsample merged data
+    // Downsample - Hook always called
     const displayData = useMemo(() => {
         if (!mergedData.length) return [];
         const fullDurationMinutes = (mergedData[mergedData.length - 1].t - mergedData[0].t) / 60;
-        const desiredResMinutes = props.detailLevel || 30;
+        const desiredResMinutes = detailLevel || 30;
 
         const targetVisualPoints = desiredResMinutes <= 1
             ? Infinity
             : Math.ceil(fullDurationMinutes / desiredResMinutes);
 
         return downsample(mergedData, left, right, targetVisualPoints);
-    }, [mergedData, left, right, props.detailLevel]);
+    }, [mergedData, left, right, detailLevel]);
 
     const infoString = useMemo(() => {
-        if (displayData.length < 2) return "";
+        if (!displayData || displayData.length < 2) return "";
         const avgInterval = (displayData[displayData.length - 1].t - displayData[0].t) / displayData.length;
         const mins = Math.max(1, Math.round(avgInterval / 60));
         return `Showing ${displayData.length} pts (~1pt/${mins}m)`;
@@ -367,7 +369,7 @@ export default function ChartComponents(props: ChartProps) {
                 />
                 <ReferenceLine x={electionDayStart} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Open', fill: '#ef4444', fontSize: 12 }} />
                 <ReferenceLine x={electionDayEnd} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Close', fill: '#ef4444', fontSize: 12 }} />
-                {props.polls?.map((poll, idx) => {
+                {polls?.map((poll, idx) => {
                     const pollTs = new Date(poll.date).getTime() / 1000;
                     return (
                         <ReferenceLine
@@ -402,4 +404,11 @@ export default function ChartComponents(props: ChartProps) {
             </LineChart>
         </div>
     );
+};
+
+export default function ChartComponents(props: ChartProps) {
+    if (props.mode === "single") {
+        return <SingleChart {...props} />;
+    }
+    return <MultiChart {...props} />;
 }
