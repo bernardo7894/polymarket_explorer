@@ -38,7 +38,7 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
     const [volumeThreshold, setVolumeThreshold] = useState(0); // Default to 0 to show more, or user preference
     const [sortOrder, setSortOrder] = useState<'default' | 'volume' | 'name'>('default');
     const [viewMode, setViewMode] = useState<'individual' | 'overlay'>('individual');
-    const [detailLevel, setDetailLevel] = useState<number>(600); // Default 600 points
+    const [detailLevel, setDetailLevel] = useState<number>(30); // Default 30 min stride
     const [mounted, setMounted] = useState(false);
     const [polls, setPolls] = useState<Poll[]>([]);
     const [showPolls, setShowPolls] = useState(true);
@@ -183,17 +183,22 @@ export default function Dashboard({ summary }: { summary: Market[] }) {
                     </div>
 
                     <div className="pt-2 border-t border-slate-800">
-                        <label className="block text-xs text-slate-400 mb-1">Chart Detail</label>
-                        <select
+                        <label className="block text-xs text-slate-400 mb-1">
+                            Resolution: {detailLevel === 1 ? 'Full Detail (1m)' : `~1 pt / ${detailLevel} min`}
+                        </label>
+                        <input
+                            type="range"
+                            min="1"
+                            max="180" // Up to 3 hours per point
+                            step="1"
                             value={detailLevel}
                             onChange={(e) => setDetailLevel(Number(e.target.value))}
-                            className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value={200}>Low (Fast)</option>
-                            <option value={600}>Medium</option>
-                            <option value={1500}>High (Slow)</option>
-                            <option value={20000}>Full (Very Slow)</option>
-                        </select>
+                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>Full</span>
+                            <span>3h</span>
+                        </div>
                     </div>
 
                     <div>

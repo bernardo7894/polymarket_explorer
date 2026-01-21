@@ -87,36 +87,48 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return null;
 };
 
-// Helper to downsample data
-const downsample = (data: any[], left: number | string | null, right: number | string | null, targetPoints = 400) => {
+// Helper to downsample data by time resolution
+const downsample = (data: any[], left: number | string | null, right: number | string | null, targetResMinutes = 30) => {
     if (!data || data.length === 0) return [];
 
-    // If full view (strings 'dataMin'/'dataMax'), use entire range
+    // If full resolution requested (1m), just return slice to avoid logic overhead
+    if (targetResMinutes <= 1) {
+        // Logic to slice data based on left/right if they are numbers
+        if (typeof left === 'number' || typeof right === 'number') {
+            return data.filter(d =>
+                (typeof left !== 'number' || d.t >= left) &&
+                (typeof right !== 'number' || d.t <= right)
+            );
+        }
+        return data;
+    }
+
+    // Identify range indices
     const startIdx = typeof left === 'number' ? data.findIndex(d => d.t >= left) : 0;
     const endIdx = typeof right === 'number' ? data.findIndex(d => d.t > right) : data.length;
 
     const sliceStart = startIdx === -1 ? 0 : startIdx;
     const sliceEnd = endIdx === -1 ? data.length : endIdx;
-    const sliceLength = sliceEnd - sliceStart;
 
-    if (sliceLength <= targetPoints) {
-        return data; // Return full resolution if within target
-    }
-
-    const stride = Math.ceil(sliceLength / targetPoints);
     const result = [];
-    for (let i = sliceStart; i < sliceEnd; i += stride) {
-        result.push(data[i]);
-    }
-    // Always include the last point of the slice to prevent gaps at right edge
-    if (sliceLength > 0 && result[result.length - 1] !== data[sliceEnd - 1]) {
-        result.push(data[sliceEnd - 1]);
+    const strideSeconds = targetResMinutes * 60;
+    let lastT = 0;
+
+    for (let i = sliceStart; i < sliceEnd; i++) {
+        const point = data[i];
+        if (i === sliceStart || i === sliceEnd - 1 || (point.t - lastT) >= strideSeconds) {
+            result.push(point);
+            lastT = point.t;
+        }
     }
     return result;
 };
 
 export default function ChartComponents(props: ChartProps) {
-    const electionTimestamp = new Date("2026-01-18T00:00:00Z").getTime() / 1000;
+    // Election Day: Jan 18, 2026. Polls Open 8:00 AM, Close 7:00 PM (19:00)
+    // Assuming UTC for simplification as data is likely UTC or we align with source
+    const electionDayStart = new Date("2026-01-18T08:00:00Z").getTime() / 1000;
+    const electionDayEnd = new Date("2026-01-18T19:00:00Z").getTime() / 1000;
 
     // Zoom state
     const [left, setLeft] = useState<string | number | null>("dataMin");
@@ -218,7 +230,9 @@ export default function ChartComponents(props: ChartProps) {
                         fontSize={12}
                     />
                     <Tooltip content={<CustomTooltip />} />
-                    <ReferenceLine x={electionTimestamp} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Election', fill: '#ef4444', fontSize: 12 }} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <ReferenceLine x={electionDayStart} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Open', fill: '#ef4444', fontSize: 12 }} />
+                    <ReferenceLine x={electionDayEnd} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Close', fill: '#ef4444', fontSize: 12 }} />
                     {props.polls?.map((poll, idx) => {
                         const pollTs = new Date(poll.date).getTime() / 1000;
                         // Only render if within current domain (optional optimization, but simple check)
@@ -336,7 +350,8 @@ export default function ChartComponents(props: ChartProps) {
                     wrapperStyle={{ paddingTop: 10, fontSize: 11 }}
                     formatter={(value) => <span className="text-slate-300">{value}</span>}
                 />
-                <ReferenceLine x={electionTimestamp} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Election', fill: '#ef4444', fontSize: 12 }} />
+                <ReferenceLine x={electionDayStart} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Open', fill: '#ef4444', fontSize: 12 }} />
+                <ReferenceLine x={electionDayEnd} stroke="#ef4444" strokeDasharray="3 3" label={{ position: 'top', value: 'Polls Close', fill: '#ef4444', fontSize: 12 }} />
                 {props.polls?.map((poll, idx) => {
                     const pollTs = new Date(poll.date).getTime() / 1000;
                     return (
