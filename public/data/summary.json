@@ -4,7 +4,7 @@
     "question": "Will Jo\u00e3o Cotrim Figueiredo win the 2026 Portugal presidential election?",
     "token_id": "28238304963115391468520084611709080022027216241044579007402765414035709535435",
     "points": 20160,
-    "volume": "3729141.230748",
+    "volume": "3729270.090748",
     "currentPrice": 0.0005
   },
   {
@@ -68,8 +68,8 @@
     "question": "Will Andr\u00e9 Ventura win the 2026 Portugal presidential election?",
     "token_id": "87048058140607839077917415447158941112086606824479198286281986963033007181784",
     "points": 20160,
-    "volume": "12162645.163755",
-    "currentPrice": 0.0205
+    "volume": "12220785.583927",
+    "currentPrice": 0.0185
   },
   {
     "id": "569427",
@@ -100,7 +100,7 @@
     "question": "Will Lu\u00eds Marques Mendes win the 2026 Portugal presidential election?",
     "token_id": "4370640939548049160201828166293191503482026064792352053936490018661409706941",
     "points": 20160,
-    "volume": "4082135.977693",
+    "volume": "4082143.277693",
     "currentPrice": 0.0005
   },
   {
@@ -115,8 +115,8 @@
     "id": "569432",
     "question": "Will Henrique Gouveia e Melo win the 2026 Portugal presidential election?",
     "token_id": "107252287464378185480339300277791815889919330201891674919771186169934663184025",
-    "points": 20159,
-    "volume": "2840722.078671",
+    "points": 20160,
+    "volume": "2840724.338671",
     "currentPrice": 0.0005
   },
   {
@@ -124,14 +124,14 @@
     "question": "Will Ant\u00f3nio Jos\u00e9 Seguro win the 2026 Portugal presidential election?",
     "token_id": "16754375222233973989954094649431109282368408854808102040230156977754673841406",
     "points": 20160,
-    "volume": "3578488.333712",
-    "currentPrice": 0.9785
+    "volume": "3608349.128946",
+    "currentPrice": 0.9795
   },
   {
     "id": "569434",
     "question": "Will Vitorino Silva win the 2026 Portugal presidential election?",
     "token_id": "43809300640517111448589613647258299174716089741074782107715826383730069021126",
-    "points": 20159,
+    "points": 20160,
     "volume": "4131416.044075",
     "currentPrice": 0.0005
   },
@@ -147,7 +147,7 @@
     "id": "569436",
     "question": "Will Ant\u00f3nio Filipe win the 2026 Portugal presidential election?",
     "token_id": "74084476985099618644873010373644848339105047027523412961502524755105614279952",
-    "points": 20159,
+    "points": 20160,
     "volume": "6993222.235925",
     "currentPrice": 0.0005
   },
@@ -155,7 +155,7 @@
     "id": "569437",
     "question": "Will Raul Perestrello win the 2026 Portugal presidential election?",
     "token_id": "100873440839630488787675306991927169852104936846951905917156069066481005498699",
-    "points": 20159,
+    "points": 20160,
     "volume": "18893236.751092",
     "currentPrice": 0.0005
   },
@@ -171,7 +171,7 @@
     "id": "569439",
     "question": "Will Pedro Passos Coelho win the 2026 Portugal presidential election?",
     "token_id": "12066144173721960949299167133110175689689620950083050321772650546514468891687",
-    "points": 20159,
+    "points": 20160,
     "volume": "4089474.48742",
     "currentPrice": 0.0005
   },
