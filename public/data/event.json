@@ -27,7 +27,7 @@
   "enableOrderBook": true,
   "negRisk": true,
   "negRiskMarketID": "0x662ec645a4070992d73b15fef6dd726f61bea72ff790c030492f597e7b0abb00",
-  "commentCount": 1668,
+  "commentCount": 1666,
   "markets": [
     {
       "id": "583627",
