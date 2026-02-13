@@ -27,7 +27,7 @@
   "enableOrderBook": true,
   "negRisk": true,
   "negRiskMarketID": "0x662ec645a4070992d73b15fef6dd726f61bea72ff790c030492f597e7b0abb00",
-  "commentCount": 1666,
+  "commentCount": 1658,
   "markets": [
     {
       "id": "583627",
@@ -109,7 +109,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583628",
@@ -190,7 +191,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583629",
@@ -272,7 +274,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583630",
@@ -353,7 +356,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583633",
@@ -451,7 +455,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569423",
@@ -535,7 +540,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569424",
@@ -619,7 +625,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569425",
@@ -703,7 +710,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569426",
@@ -785,7 +793,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569427",
@@ -864,7 +873,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569428",
@@ -948,7 +958,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569429",
@@ -1027,7 +1038,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569430",
@@ -1107,7 +1119,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569431",
@@ -1191,7 +1204,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569432",
@@ -1271,7 +1285,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569433",
@@ -1354,7 +1369,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569434",
@@ -1438,7 +1454,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569435",
@@ -1522,7 +1539,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569436",
@@ -1606,7 +1624,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569437",
@@ -1690,7 +1709,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569438",
@@ -1774,7 +1794,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569439",
@@ -1860,7 +1881,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569440",
@@ -1944,7 +1966,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569441",
@@ -2042,7 +2065,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569442",
@@ -2140,7 +2164,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569443",
@@ -2238,7 +2263,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569444",
@@ -2336,7 +2362,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569445",
@@ -2434,7 +2461,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569446",
@@ -2532,7 +2560,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569447",
@@ -2630,7 +2659,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569448",
@@ -2728,7 +2758,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569449",
@@ -2826,7 +2857,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569450",
@@ -2924,7 +2956,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "569451",
@@ -3022,7 +3055,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583631",
@@ -3120,7 +3154,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583632",
@@ -3218,7 +3253,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583635",
@@ -3314,7 +3350,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583637",
@@ -3410,7 +3447,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583639",
@@ -3506,7 +3544,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583641",
@@ -3602,7 +3641,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583643",
@@ -3698,7 +3738,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583634",
@@ -3796,7 +3837,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583636",
@@ -3892,7 +3934,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583638",
@@ -3988,7 +4031,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583640",
@@ -4084,7 +4128,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583642",
@@ -4180,7 +4225,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     },
     {
       "id": "583644",
@@ -4276,7 +4322,8 @@
       "rfqEnabled": false,
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
-      "requiresTranslation": false
+      "requiresTranslation": false,
+      "feeType": null
     }
   ],
   "tags": [
