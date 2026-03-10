@@ -4336,7 +4336,7 @@
       "createdBy": 15,
       "updatedBy": 15,
       "createdAt": "2024-03-07T20:41:56.773Z",
-      "updatedAt": "2026-02-06T20:23:31.077819Z",
+      "updatedAt": "2026-03-09T22:35:06.772403Z",
       "requiresTranslation": false
     },
     {
@@ -4347,7 +4347,7 @@
       "publishedAt": "2023-10-25 18:55:50.674+00",
       "updatedBy": 13,
       "createdAt": "2023-10-25T18:55:50.681Z",
-      "updatedAt": "2026-02-06T20:24:21.058056Z",
+      "updatedAt": "2026-03-09T22:35:26.76623Z",
       "forceHide": true,
       "requiresTranslation": false
     },
@@ -4357,7 +4357,7 @@
       "slug": "world",
       "forceShow": false,
       "createdAt": "2025-03-19T23:36:08.498099Z",
-      "updatedAt": "2026-02-06T20:04:41.800728Z",
+      "updatedAt": "2026-03-09T22:25:02.420693Z",
       "requiresTranslation": false
     },
     {
@@ -4366,7 +4366,7 @@
       "slug": "world-elections",
       "forceShow": false,
       "createdAt": "2024-11-07T23:07:25.512144Z",
-      "updatedAt": "2026-02-06T20:18:10.802741Z",
+      "updatedAt": "2026-03-09T22:20:41.744191Z",
       "requiresTranslation": false
     },
     {
@@ -4377,7 +4377,7 @@
       "publishedAt": "2023-11-02 21:24:31.008+00",
       "updatedBy": 13,
       "createdAt": "2023-11-02T21:24:31.198Z",
-      "updatedAt": "2026-02-06T20:14:30.314987Z",
+      "updatedAt": "2026-03-09T22:32:04.396035Z",
       "forceHide": true,
       "requiresTranslation": false
     },
@@ -4387,7 +4387,7 @@
       "slug": "macro-election-2",
       "forceShow": false,
       "createdAt": "2024-11-13T01:41:08.414056Z",
-      "updatedAt": "2026-02-06T20:07:32.346386Z",
+      "updatedAt": "2026-03-09T22:27:02.811759Z",
       "requiresTranslation": false
     },
     {
@@ -4396,7 +4396,7 @@
       "slug": "portugal-election",
       "forceShow": false,
       "createdAt": "2026-01-01T20:06:12.182742Z",
-      "updatedAt": "2026-02-06T20:13:40.215454Z",
+      "updatedAt": "2026-03-09T22:31:44.340441Z",
       "isCarousel": false,
       "requiresTranslation": false
     }
