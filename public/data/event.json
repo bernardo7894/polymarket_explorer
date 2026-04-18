@@ -4336,7 +4336,7 @@
       "createdBy": 15,
       "updatedBy": 15,
       "createdAt": "2024-03-07T20:41:56.773Z",
-      "updatedAt": "2026-04-15T21:08:01.087144Z",
+      "updatedAt": "2026-04-17T21:08:23.096987Z",
       "requiresTranslation": false
     },
     {
@@ -4347,7 +4347,7 @@
       "publishedAt": "2023-10-25 18:55:50.674+00",
       "updatedBy": 13,
       "createdAt": "2023-10-25T18:55:50.681Z",
-      "updatedAt": "2026-04-15T21:08:56.491767Z",
+      "updatedAt": "2026-04-17T20:39:54.201881Z",
       "forceHide": true,
       "requiresTranslation": false
     },
@@ -4396,7 +4396,7 @@
       "slug": "portugal-election",
       "forceShow": false,
       "createdAt": "2026-01-01T20:06:12.182742Z",
-      "updatedAt": "2026-04-15T20:47:58.17562Z",
+      "updatedAt": "2026-04-17T20:19:23.124343Z",
       "isCarousel": false,
       "requiresTranslation": false
     }
