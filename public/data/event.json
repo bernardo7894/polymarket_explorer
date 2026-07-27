@@ -113,7 +113,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569424",
@@ -199,7 +200,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569425",
@@ -285,7 +287,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569426",
@@ -369,7 +372,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569427",
@@ -450,7 +454,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569428",
@@ -536,7 +541,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569429",
@@ -617,7 +623,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569430",
@@ -699,7 +706,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569431",
@@ -785,7 +793,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569432",
@@ -867,7 +876,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569433",
@@ -952,7 +962,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569434",
@@ -1038,7 +1049,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569435",
@@ -1124,7 +1136,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569436",
@@ -1210,7 +1223,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569437",
@@ -1296,7 +1310,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569438",
@@ -1382,7 +1397,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569439",
@@ -1470,7 +1486,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569440",
@@ -1556,7 +1573,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569441",
@@ -1656,7 +1674,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569442",
@@ -1756,7 +1775,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569443",
@@ -1856,7 +1876,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569444",
@@ -1956,7 +1977,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569445",
@@ -2056,7 +2078,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569446",
@@ -2156,7 +2179,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569447",
@@ -2256,7 +2280,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569448",
@@ -2356,7 +2381,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569449",
@@ -2456,7 +2482,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569450",
@@ -2556,7 +2583,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "569451",
@@ -2656,7 +2684,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583627",
@@ -2740,7 +2769,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583628",
@@ -2823,7 +2853,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583629",
@@ -2907,7 +2938,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583630",
@@ -2990,7 +3022,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583631",
@@ -3090,7 +3123,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583632",
@@ -3190,7 +3224,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583633",
@@ -3290,7 +3325,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583634",
@@ -3390,7 +3426,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583635",
@@ -3488,7 +3525,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583636",
@@ -3586,7 +3624,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583637",
@@ -3684,7 +3723,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583638",
@@ -3782,7 +3822,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583639",
@@ -3880,7 +3921,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583640",
@@ -3978,7 +4020,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583641",
@@ -4076,7 +4119,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583642",
@@ -4174,7 +4218,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583643",
@@ -4272,7 +4317,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     },
     {
       "id": "583644",
@@ -4370,7 +4416,8 @@
       "holdingRewardsEnabled": false,
       "feesEnabled": false,
       "requiresTranslation": false,
-      "feeType": null
+      "feeType": null,
+      "version": "v1"
     }
   ],
   "tags": [
@@ -4465,5 +4512,6 @@
   "pendingDeployment": false,
   "deploying": false,
   "deployingTimestamp": "2025-08-29T19:00:06.827967Z",
-  "requiresTranslation": false
+  "requiresTranslation": false,
+  "version": "v1"
 }
